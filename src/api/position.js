@@ -1,17 +1,9 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function fetchFilteredPositions() {
   return request({
-    url: '/employees',
-    method: 'get',
-    params: query
-  })
-}
-
-export function deleteEmployee(id) {
-  return request({
-    url: `/employees/${id}`,
-    method: 'delete'
+    url: '/authorities/filter',
+    method: 'get'
   })
 }
 

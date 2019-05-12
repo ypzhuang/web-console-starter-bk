@@ -1,28 +1,31 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" :placeholder="$t('table.title')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" :placeholder="$t('table.importance')" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
+      <el-select v-model="listQuery.shopId" :placeholder="$t('employee.shop')" clearable style="width: 140px" class="filter-item">
+        <el-option v-for="item in ownShops" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
-      <el-select v-model="listQuery.type" :placeholder="$t('table.type')" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
+      <el-input v-model="listQuery.nameOrUserName" :placeholder="$t('employee.nameOrUserName')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select v-model="listQuery.role" :placeholder="$t('employee.position')" clearable class="filter-item" style="width: 130px">
+        <el-option v-for="item in positions" :key="item.code" :label="item.name" :value="item.code" />
       </el-select>
-      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
+      <el-select v-model="listQuery.status" :placeholder="$t('employee.status')" clearable class="filter-item" style="width: 130px">
+        <el-option v-for="item in positionsStatus" :key="item.code" :label="item.name" :value="item.code" />
       </el-select>
+      <!--      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">-->
+      <!--        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />-->
+      <!--      </el-select>-->
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         {{ $t('table.add') }}
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        {{ $t('table.export') }}
-      </el-button>
-      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        {{ $t('table.reviewer') }}
-      </el-checkbox>
+      <!--      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">-->
+      <!--        {{ $t('table.export') }}-->
+      <!--      </el-button>-->
+      <!--      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">-->
+      <!--        {{ $t('table.reviewer') }}-->
+      <!--      </el-checkbox>-->
     </div>
 
     <el-table
@@ -35,47 +38,47 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="80">
+      <el-table-column :label="$t('employee.id')" prop="id" sortable="custom" align="center" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.date')" width="150px" align="center">
+      <el-table-column :label="$t('employee.name')" width="200px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.lastLoginDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.name + "/" + scope.row.username }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.title')" min-width="150px">
+      <!--      <el-table-column :label="$t('table.title')" min-width="150px">-->
+      <!--        <template slot-scope="{row}">-->
+      <!--          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>-->
+      <!--          <el-tag>{{ row.type | typeFilter }}</el-tag>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
+      <el-table-column :label="$t('employee.onboard_date')" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.onboardDate }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('employee.shop_belong')" width="200px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.shops.map(shop => shop.name).join(';') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('employee.position')" width="200px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.authorityNames | positionFilter }}</span>
+        </template>
+      </el-table-column>
+      <!--      <el-table-column :label="$t('table.readings')" align="center" width="95">-->
+      <!--        <template slot-scope="{row}">-->
+      <!--          <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>-->
+      <!--          <span v-else>0</span>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
+      <el-table-column :label="$t('employee.status')" class-name="status-col" width="100">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-          <el-tag>{{ row.type | typeFilter }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.author')" width="110px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="showReviewer" :label="$t('table.reviewer')" width="110px" align="center">
-        <template slot-scope="scope">
-          <span style="color:red;">{{ scope.row.reviewer }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.importance')" width="80px">
-        <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" class="meta-item__icon" />
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.readings')" align="center" width="95">
-        <template slot-scope="{row}">
-          <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
-          <span v-else>0</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.status')" class-name="status-col" width="100">
-        <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
+          <el-tag :type="row.enabled | statusFilter">
+            {{ row.enabled | statusNameFilter }}
           </el-tag>
         </template>
       </el-table-column>
@@ -84,13 +87,13 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             {{ $t('table.edit') }}
           </el-button>
-          <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
-            {{ $t('table.publish') }}
-          </el-button>
-          <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
-            {{ $t('table.draft') }}
-          </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleModifyStatus(row,'deleted')">
+          <!--          <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">-->
+          <!--            {{ $t('table.publish') }}-->
+          <!--          </el-button>-->
+          <!--          <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">-->
+          <!--            {{ $t('table.draft') }}-->
+          <!--          </el-button>-->
+          <el-button type="danger" size="mini" @click="handleModifyStatus(row,'deleted')">
             {{ $t('table.delete') }}
           </el-button>
         </template>
@@ -134,29 +137,31 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>
-      </span>
-    </el-dialog>
+    <!--    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">-->
+    <!--      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">-->
+    <!--        <el-table-column prop="key" label="Channel" />-->
+    <!--        <el-table-column prop="pv" label="Pv" />-->
+    <!--      </el-table>-->
+    <!--      <span slot="footer" class="dialog-footer">-->
+    <!--        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>-->
+    <!--      </span>-->
+    <!--    </el-dialog>-->
   </div>
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/employee'
+import { fetchList, deleteEmployee, fetchPv, createArticle, updateArticle } from '@/api/employee'
+import { fetchOwns } from '@/api/shop'
+import { fetchFilteredPositions } from '@/api/position'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
+  { key: 'US', display_name: 'USA' }
+  // { key: 'JP', display_name: 'Japan' },
+  // { key: 'EU', display_name: 'Eurozone' }
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
@@ -171,26 +176,42 @@ export default {
   directives: { waves },
   filters: {
     statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
+      if (status) return 'success' // info
+      else return 'danger'
     },
+    statusNameFilter(status) {
+      if (status) return '在职'
+      else return '离职'
+    },
+
     typeFilter(type) {
       return calendarTypeKeyValue[type]
+    },
+    positionFilter(keys) {
+      const positions = {
+        'ROLE_SHOP_USER': '店员',
+        'ROLE_SHOP_ADMIN': '店长',
+        'ROLE_MANAGER': '管理员'
+      }
+      return keys.map(key => positions[key]).join(';')
     }
   },
   data() {
     return {
       tableKey: 0,
       list: null,
+      ownShops: null,
+      positions: null,
+      positionsStatus: [{ 'code': true, 'name': '在职' }, { 'code': false, name: '离职' }],
       total: 0,
       listLoading: true,
+
       listQuery: {
         current: 1,
         size: 20,
+        shopId: undefined,
+        nameOrUserName: undefined,
+        status: undefined,
         importance: undefined,
         title: undefined,
         type: undefined,
@@ -227,20 +248,27 @@ export default {
     }
   },
   created() {
+    this.getOwnShops()
+    this.getFilteredPositions()
     this.getList()
   },
   methods: {
+    getOwnShops() {
+      fetchOwns().then(response => {
+        this.ownShops = response
+      })
+    },
+    getFilteredPositions() {
+      fetchFilteredPositions().then(response => {
+        this.positions = response
+      })
+    },
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.records
         this.total = response.total
         this.listLoading = false
-        console.dir(this.list)
-        // Just to simulate the time of the request
-        // setTimeout(() => {
-        //
-        // }, 1.5 * 1000)
       })
     },
     handleFilter() {
@@ -248,9 +276,12 @@ export default {
       this.getList()
     },
     handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作成功',
-        type: 'success'
+      deleteEmployee(row.id).then(response => {
+        this.list.shift(row)
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
       })
       row.status = status
     },
