@@ -12,10 +12,10 @@
         <el-option v-for="item in positionsStatus" :key="item.code" :label="item.name" :value="item.code" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        {{ $t('table.search') }}
+        {{ $t('search') }}
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        {{ $t('table.add') }}
+        {{ $t('add') }}
       </el-button>
     </div>
 
@@ -56,13 +56,13 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            {{ $t('table.edit') }}
+            {{ $t('edit') }}
           </el-button>
           <el-button type="danger" size="mini" @click="handleModifyStatus(row)">
-            {{ $t('table.delete') }}
+            {{ $t('delete') }}
           </el-button>
         </template>
       </el-table-column>
@@ -99,10 +99,10 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          {{ $t('table.cancel') }}
+          {{ $t('cancel') }}
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          {{ $t('table.confirm') }}
+          {{ $t('confirm') }}
         </el-button>
       </div>
     </el-dialog>
@@ -167,8 +167,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
-        create: 'Create'
+        update: this.$t('Edit'),
+        create: this.$t('Create')
       },
       rules: {
         name: [{ required: true, message: '姓名不能为空', trigger: 'change' }],

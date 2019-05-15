@@ -185,5 +185,14 @@ export default {
     tagsView: '开启 Tags-View',
     fixedHeader: '固定 Header',
     sidebarLogo: '侧边栏 Logo'
-  }
+  },
+  Edit: '编辑',
+  Create: '新增',
+  delete: '删除',
+  cancel: '取 消',
+  confirm: '确 定',
+  search: '搜索',
+  add: '添加',
+  edit: '编辑',
+  actions: '操作'
 }
