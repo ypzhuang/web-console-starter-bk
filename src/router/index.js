@@ -84,6 +84,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/employee',
+    component: Layout,
+    redirect: '/employee/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/employee/index'),
+        name: 'Employee',
+        meta: { title: 'employee', icon: 'peoples', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/documentation',
     component: Layout,
     children: [

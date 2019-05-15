@@ -31,18 +31,18 @@ export function fetchPv(pv) {
   })
 }
 
-export function createArticle(data) {
+export function createEmployee(data) {
   return request({
-    url: '/article/create',
+    url: '/employees',
     method: 'post',
     data
   })
 }
 
-export function updateArticle(data) {
+export function updateEmployee(data) {
   return request({
-    url: '/article/update',
-    method: 'post',
+    url: `/employees/${data.id}`,
+    method: 'put',
     data
   })
 }

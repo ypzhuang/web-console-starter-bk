@@ -62,7 +62,8 @@ export default {
     clipboardDemo: 'Clipboard',
     i18n: '国际化',
     externalLink: '外链',
-    profile: '个人中心'
+    profile: '个人中心',
+    employee: '员工'
   },
   navbar: {
     dashboard: '首页',
@@ -133,6 +134,19 @@ export default {
     delete: '删除',
     cancel: '取 消',
     confirm: '确 定'
+  },
+  employee: {
+    id: '序号',
+    name: '姓名',
+    onboard_date: '入职日期',
+    shop_belong: '所属店铺',
+    position: '职位',
+    status: '状态',
+    search: '搜索',
+    shop: '店铺名称',
+    nameOrUserName: '员工姓名或者手机号',
+    username: '手机号',
+    select_date: '请选择日期' // "Please pick a date"
   },
   example: {
     warning: '创建和编辑页面是不能被 keep-alive 缓存的，因为keep-alive 的 include 目前不支持根据路由来缓存，所以目前都是基于 component name 来进行缓存的。如果你想类似的实现缓存效果，可以使用 localStorage 等浏览器缓存方案。或者不要使用 keep-alive 的 include，直接缓存所有页面。详情见'
