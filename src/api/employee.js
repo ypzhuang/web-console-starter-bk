@@ -15,22 +15,6 @@ export function deleteEmployee(id) {
   })
 }
 
-export function fetchArticle(id) {
-  return request({
-    url: '/article/detail',
-    method: 'get',
-    params: { id }
-  })
-}
-
-export function fetchPv(pv) {
-  return request({
-    url: '/article/pv',
-    method: 'get',
-    params: { pv }
-  })
-}
-
 export function createEmployee(data) {
   return request({
     url: '/employees',
@@ -46,3 +30,25 @@ export function updateEmployee(data) {
     data
   })
 }
+
+export function fetchAllShopAdmins() {
+  return request({
+    url: 'employees/allShopAdmins',
+    method: 'get'
+  })
+}
+
+export function fetchAllManagers() {
+  return request({
+    url: 'employees/allManagers',
+    method: 'get'
+  })
+}
+
+export function fetchShopUsers() {
+  return request({
+    url: 'employees/shopUsers',
+    method: 'get'
+  })
+}
+

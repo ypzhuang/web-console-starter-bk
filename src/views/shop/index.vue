@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.shopId" :placeholder="$t('employee.shop')" clearable style="width: 140px" class="filter-item">
-        <el-option v-for="item in ownShops" :key="item.id" :label="item.name" :value="item.id" />
-      </el-select>
-      <el-input v-model="listQuery.nameOrUserName" :placeholder="$t('employee.nameOrUserName')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.role" :placeholder="$t('employee.position')" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in positions" :key="item.code" :label="item.name" :value="item.code" />
-      </el-select>
-      <el-select v-model="listQuery.status" :placeholder="$t('employee.status')" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in positionsStatus" :key="item.code" :label="item.name" :value="item.code" />
-      </el-select>
+      <el-cascader
+        v-model="locationSelected"
+        placeholder="省份/城市"
+        clearable
+        :options="locations"
+        :props="props"
+        class="filter-item"
+        @change="handleItemChange"
+      />
+      <el-input v-model="listQuery.name" placeholder="请输入店铺名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('search') }}
       </el-button>
@@ -29,34 +29,44 @@
       style="width: 100%;"
     >
       <el-table-column align="center" :label="$t('employee.id')" type="index" width="60px" />
-      <el-table-column :label="$t('employee.name')" width="200px" align="center">
+      <el-table-column label="省份" width="100px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.name + "/" + scope.row.username }}</span>
+          <span>{{ scope.row.provinceCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('employee.onboard_date')" width="100px" align="center">
+      <el-table-column label="城市" width="100px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.onboardDate }}</span>
+          <span>{{ scope.row.cityCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('employee.shop_belong')" width="250px" align="center">
+      <el-table-column label="店铺名称" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.shops.map(shop => shop.name).join(';') }}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('employee.position')" width="100px" align="center">
+      <el-table-column label="地址" width="200px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.authorityNames | positionFilter }}</span>
+          <span>{{ scope.row.address }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('employee.status')" class-name="status-col" width="100px">
+      <el-table-column label="店铺管理员" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.shopManager }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="店长" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.shopAdmin }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" class-name="status-col" width="100px">
         <template slot-scope="{row}">
-          <el-tag :type="row.enabled | statusFilter">
-            {{ row.enabled | statusNameFilter }}
-          </el-tag>
+          <!--          <el-tag :type="row.status | statusFilter">-->
+          {{ row.status }}
+          <!--          </el-tag>-->
         </template>
       </el-table-column>
-      <el-table-column :label="$t('actions')" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('actions')" align="center" width="150px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             {{ $t('edit') }}
@@ -71,28 +81,47 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.current" :limit.sync="listQuery.size" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item :label="$t('employee.name')" prop="name">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="店铺名称" prop="name">
           <el-input v-model="temp.name" />
         </el-form-item>
-        <el-form-item :label="$t('employee.username')" prop="username">
-          <el-input v-model="temp.username" />
+        <el-form-item label="省份/城市" prop="newUpdateLocationSelected">
+          <el-cascader
+            v-model="newUpdateLocationSelected"
+            placeholder="省份/城市"
+            clearable
+            :options="locations"
+            :props="props"
+            class="filter-item"
+            @change="handleItemChange"
+          />
         </el-form-item>
-        <el-form-item :label="$t('employee.position')" prop="role">
-          <el-select v-model="temp.role" clearable class="filter-item" :placeholder="$t('employee.position')" @change="temp.shops=[]">
-            <el-option v-for="item in positions" :key="item.code" :label="item.name" :value="item.code" />
+        <el-form-item label="店铺地址" prop="address">
+          <el-input v-model="temp.address" />
+        </el-form-item>
+        <el-form-item label="店铺管理员" prop="shopManager">
+          <el-select v-model="temp.shopManager" clearable class="filter-item">
+            <el-option v-for="item in shopManagers" :key="item.id" :label="item.username + '/' +item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('employee.shop')" prop="shops">
-          <el-select v-model="temp.shops" multiple :multiple-limit="temp.role === 'ROLE_SHOP_USER'? 1:0" class="filter-item" :placeholder="$t('employee.shop')">
-            <el-option v-for="item in ownShops" :key="item.id" :label="item.name" :value="item.id" />
+        <el-form-item label="店长" prop="shopManager">
+          <el-select v-model="temp.shopAdmin" clearable class="filter-item">
+            <el-option v-for="item in shopAdmins" :key="item.id" :label="item.username + '/' +item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('employee.onboard_date')" prop="onboardDate">
-          <el-date-picker v-model="temp.onboardDate" type="date" value-format="yyyy-MM-dd" :placeholder="$t('employee.select_date')" />
+        <el-form-item label="店员" prop="shops">
+          <el-select v-model="temp.shopUsers" multiple class="filter-item">
+            <el-option v-for="item in shopUsers" :key="item.id" :label="item.username + '/' +item.name" :value="item.id" />
+          </el-select>
         </el-form-item>
-        <el-form-item :label="$t('employee.status')" prop="enabled">
-          <el-select v-model="temp.enabled" class="filter-item" :placeholder="$t('employee.status')">
+        <el-form-item label="经度" prop="longitude">
+          <el-input v-model="temp.longitude" />
+        </el-form-item>
+        <el-form-item label="纬度" prop="latitude">
+          <el-input v-model="temp.latitude" />
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="temp.status" class="filter-item">
             <el-option v-for="item in positionsStatus" :key="item.code" :label="item.name" :value="item.code" />
           </el-select>
         </el-form-item>
@@ -110,9 +139,9 @@
 </template>
 
 <script>
-import { fetchList, deleteEmployee, createEmployee, updateEmployee } from '@/api/employee'
-import { fetchOwns } from '@/api/shop'
-import { fetchFilteredPositions } from '@/api/position'
+import { fetchLocations } from '@/api/location'
+import { deleteEmployee, createEmployee, updateEmployee, fetchAllShopAdmins, fetchAllManagers, fetchShopUsers } from '@/api/employee'
+import { fetchList } from '@/api/shop'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -140,20 +169,27 @@ export default {
   },
   data() {
     return {
+      locations: [],
+      props: {
+        value: 'value',
+        label: 'label',
+        children: 'children'
+      },
+      locationSelected: [],
+      newUpdateLocationSelected: [],
       tableKey: 0,
       list: null,
-      ownShops: null,
-      positions: null,
-      positionsStatus: [{ 'code': true, 'name': '在职' }, { 'code': false, name: '离职' }],
+      shopAdmins: [],
+      shopUsers: [],
+      shopManagers: [],
       total: 0,
       listLoading: true,
-
       listQuery: {
         current: 1,
         size: 20,
-        shopId: undefined,
-        nameOrUserName: undefined,
-        status: undefined
+        name: undefined,
+        province: undefined,
+        city: undefined
       },
       temp: {
         id: undefined,
@@ -171,36 +207,56 @@ export default {
         create: this.$t('Create')
       },
       rules: {
-        name: [{ required: true, message: '姓名不能为空', trigger: 'change' }],
-        role: [{ required: true, message: '职位不能空', trigger: 'change' }],
-        username: [{ required: true, message: '手机号不能空', trigger: 'change' }]
+        name: [{ required: true, message: '店铺名称不能为空', trigger: 'change' }],
+        newUpdateLocationSelected: [{ required: true, message: '省份/城市不能空', trigger: 'change' }],
+        status: [{ required: true, message: '状态不能为空', trigger: 'change' }]
       },
       downloadLoading: false
     }
   },
   created() {
-    this.getOwnShops()
-    this.getFilteredPositions()
+    this.getLocations()
     this.getList()
+    this.getEmployees()
   },
   methods: {
-    getOwnShops() {
-      fetchOwns().then(response => {
-        this.ownShops = response
-      })
+    handleItemChange(val) {
+      console.log('active item:', val)
     },
-    getFilteredPositions() {
-      fetchFilteredPositions().then(response => {
-        this.positions = response
+    getLocations() {
+      fetchLocations().then(response => {
+        this.locations = response
       })
     },
     getList() {
       this.listLoading = true
+      this.listQuery.province = this.locationSelected !== undefined ? this.locationSelected[0] : undefined
+      this.listQuery.city = this.locationSelected !== undefined ? this.locationSelected[1] : undefined
       fetchList(this.listQuery).then(response => {
         this.list = response.records
         this.total = response.total
         this.listLoading = false
       })
+    },
+    getAllShopAdmins() {
+      fetchAllShopAdmins().then(response => {
+        this.shopAdmins = response
+      })
+    },
+    getAllManagers() {
+      fetchAllManagers().then(response => {
+        this.shopManagers = response
+      })
+    },
+    getShopUsers() {
+      fetchShopUsers().then(response => {
+        this.shopUsers = response
+      })
+    },
+    getEmployees() {
+      this.getAllManagers()
+      this.getAllShopAdmins()
+      this.getShopUsers()
     },
     handleFilter() {
       this.listQuery.current = 1

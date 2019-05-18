@@ -84,19 +84,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/employee',
-    component: Layout,
-    redirect: '/employee/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/employee/index'),
-        name: 'Employee',
-        meta: { title: 'employee', icon: 'peoples', noCache: true }
-      }
-    ]
-  },
-  {
     path: '/shop',
     component: Layout,
     redirect: '/shop/index',
@@ -106,6 +93,19 @@ export const constantRoutes = [
         component: () => import('@/views/shop/index'),
         name: 'Shop',
         meta: { title: 'Shop', icon: 'component', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/employee',
+    component: Layout,
+    redirect: '/employee/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/employee/index'),
+        name: 'Employee',
+        meta: { title: 'employee', icon: 'peoples', noCache: true }
       }
     ]
   },
