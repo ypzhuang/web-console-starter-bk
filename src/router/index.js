@@ -110,6 +110,69 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/goods',
+    component: Layout,
+    redirect: '/goods/index',
+    name: '商品',
+    meta: { title: '商品', icon: 'example' },
+    children: [
+      {
+        path: 'index',
+        name: '查询',
+        component: () => import('@/views/goods/index'),
+        meta: { title: '查询', icon: 'table' }
+      },
+      {
+        path: 'detail',
+        name: 'Tree',
+        component: () => import('@/views/goods/detail'),
+        meta: { title: '新增/修改', icon: 'tree' }
+      }
+    ]
+  },
+  {
+    path: '/forSale',
+    component: Layout,
+    redirect: '/forSale/index',
+    name: '店铺在售商品',
+    meta: { title: '店铺在售商品', icon: 'example' },
+    children: [
+      {
+        path: 'index',
+        name: 'Table',
+        component: () => import('@/views/forSale/index'),
+        meta: { title: '查询', icon: 'table' }
+      },
+      {
+        path: 'detail',
+        name: 'Tree',
+        component: () => import('@/views/forSale/detail'),
+        meta: { title: '新增/修改', icon: 'tree' }
+      }
+    ]
+  },
+  {
+    path: '/customer',
+    component: Layout,
+    redirect: '/customer/index',
+    name: '客户',
+    meta: { title: '客户', icon: 'example' },
+    children: [
+      {
+        path: 'index',
+        name: 'Table',
+        component: () => import('@/views/customer/index'),
+        meta: { title: '查询', icon: 'table' }
+      },
+      {
+        path: 'detail',
+        name: 'Tree',
+        component: () => import('@/views/customer/detail'),
+        meta: { title: '新增/修改', icon: 'tree' }
+      }
+    ]
+  },
+  {
     path: '/documentation',
     component: Layout,
     children: [
