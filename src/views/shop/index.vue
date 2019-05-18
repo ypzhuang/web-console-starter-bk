@@ -122,7 +122,7 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="temp.status" class="filter-item">
-            <el-option v-for="item in positionsStatus" :key="item.code" :label="item.name" :value="item.code" />
+            <el-option v-for="item in shopStatus" :key="item.value" :label="item.name" :value="item.value" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -144,6 +144,7 @@ import { deleteEmployee, createEmployee, updateEmployee, fetchAllShopAdmins, fet
 import { fetchList } from '@/api/shop'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { getCodes } from '@/utils/dict'
 
 export default {
   name: 'Employee',
@@ -182,6 +183,7 @@ export default {
       shopAdmins: [],
       shopUsers: [],
       shopManagers: [],
+      shopStatus: getCodes('1020'),
       total: 0,
       listLoading: true,
       listQuery: {

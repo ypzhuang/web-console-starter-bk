@@ -1,4 +1,4 @@
-这是goods<template>
+<template>
   <div class="app-container">
     <div class="filter-container">
       <el-select v-model="listQuery.importance" placeholder="所属店铺" clearable style="width: 90px" class="filter-item">
