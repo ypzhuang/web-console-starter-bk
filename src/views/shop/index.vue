@@ -61,9 +61,9 @@
       </el-table-column>
       <el-table-column label="状态" class-name="status-col" width="100px">
         <template slot-scope="{row}">
-          <!--          <el-tag :type="row.status | statusFilter">-->
-          {{ row.status }}
-          <!--          </el-tag>-->
+          <el-tag :type="row.status | statusFilter">
+            {{ row.status | code2Name }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column :label="$t('actions')" align="center" width="150px" class-name="small-padding fixed-width">
@@ -150,24 +150,6 @@ export default {
   name: 'Employee',
   components: { Pagination },
   directives: { waves },
-  filters: {
-    statusFilter(status) {
-      if (status) return 'success' // info
-      else return 'danger'
-    },
-    statusNameFilter(status) {
-      if (status) return '在职'
-      else return '离职'
-    },
-    positionFilter(keys) {
-      const positions = {
-        'ROLE_SHOP_USER': '店员',
-        'ROLE_SHOP_ADMIN': '店长',
-        'ROLE_MANAGER': '管理员'
-      }
-      return keys && keys.map(key => positions[key]).join(';')
-    }
-  },
   data() {
     return {
       locations: [],

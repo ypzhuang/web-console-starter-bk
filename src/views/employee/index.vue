@@ -29,7 +29,7 @@
       style="width: 100%;"
     >
       <el-table-column align="center" :label="$t('employee.id')" type="index" width="60px" />
-      <el-table-column :label="$t('employee.name')" width="200px" align="center">
+      <el-table-column :label="$t('employee.name')" width="250px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.name + "/" + scope.row.username }}</span>
         </template>
@@ -121,21 +121,9 @@ export default {
   components: { Pagination },
   directives: { waves },
   filters: {
-    statusFilter(status) {
-      if (status) return 'success' // info
-      else return 'danger'
-    },
     statusNameFilter(status) {
       if (status) return '在职'
       else return '离职'
-    },
-    positionFilter(keys) {
-      const positions = {
-        'ROLE_SHOP_USER': '店员',
-        'ROLE_SHOP_ADMIN': '店长',
-        'ROLE_MANAGER': '管理员'
-      }
-      return keys && keys.map(key => positions[key]).join(';')
     }
   },
   data() {

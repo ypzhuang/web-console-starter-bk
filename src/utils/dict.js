@@ -25,3 +25,14 @@ export function getCodes(typeCode) {
   const type = getDicts().find(dict => dict.typeCode === typeCode)
   return type.codes || []
 }
+
+const map = {}
+export function getName(code) {
+  let name = map[code]
+  if (!name) {
+    const codeRecord = getDicts().flatMap(d => d.codes).find(c => c.value === code)
+    name = codeRecord && codeRecord.name || code
+    map[code] = name
+  }
+  return name
+}
