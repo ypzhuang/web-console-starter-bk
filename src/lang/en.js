@@ -53,6 +53,25 @@ export default {
     resetAppSecurityWarning: 'Are you sure to reset the App Security?',
     keepAppSecurityWarning: 'Please keep the App Security carefully.'
   },
+  message: {
+    messageId: 'Message ID',
+    appId: 'App ID',
+    mqMsgId: 'MQ Msg ID',
+    messageClass: 'Message Class',
+    messageType: 'Message Type',
+    status: 'Status',
+    content: 'Content',
+    receiveDate: 'Receive Date',
+    queuingDate: 'Queuing Date',
+    cancelDate: 'Cancel Date',
+    delayLevel: 'Delay Level',
+    reason: 'Reason',
+    resend: 'ReSend',
+    receiveDateFrom: 'Receive Date From',
+    receiveDateTo: 'Receive Date To',
+    sendDateFrom: 'Send Date From',
+    sendDateTo: 'Send Date To'
+  },
   id: 'ID',
   create: 'Create',
   delete: 'Delete',
@@ -69,5 +88,8 @@ export default {
   success: 'Success',
   updateSuccessfully: 'Updated Successfully.',
   updateStatusWarning: 'Are you sure to update the status?',
-  actionSuccessfully: 'Actioned Successfully.'
+  actionSuccessfully: 'Actioned Successfully.',
+  today: 'Today',
+  yesterday: 'Yesterday',
+  aWeekAgo: 'A Week Ago'
 }

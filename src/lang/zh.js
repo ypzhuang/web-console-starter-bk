@@ -53,6 +53,25 @@ export default {
     resetAppSecurityWarning: '确定重置APP密钥吗?',
     keepAppSecurityWarning: '请妥善保管APP密钥'
   },
+  message: {
+    messageId: '消息ID',
+    appId: 'APP ID',
+    mqMsgId: 'MQ ID',
+    messageClass: '消息大类',
+    messageType: '消息小类',
+    status: '状态',
+    content: '消息内容',
+    receiveDate: '接收时间',
+    queuingDate: '队列时间',
+    cancelDate: '取消时间',
+    delayLevel: '延迟级别',
+    reason: '原因',
+    resend: '重新发送',
+    receiveDateFrom: '接收日期起始',
+    receiveDateTo: '接收日期结束',
+    sendDateFrom: '发送日期起始',
+    sendDateTo: '发送日期结束'
+  },
   id: '序号',
   create: '新增',
   delete: '删除',
@@ -69,5 +88,8 @@ export default {
   success: '成功',
   updateSuccessfully: '更新成功',
   updateStatusWarning: '确定更改状态吗?',
-  actionSuccessfully: '操作成功'
+  actionSuccessfully: '操作成功',
+  today: '今天',
+  yesterday: '昨天',
+  aWeekAgo: '一周前'
 }
