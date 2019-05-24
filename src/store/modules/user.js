@@ -8,7 +8,7 @@ const state = {
   enable: '',
   username: '',
   roles: [],
-  avatar: 'http://47.96.166.81:8877/group1/M00/00/00/rBAsLlzW6RSASFL_AAlS7t-UrJI620.jpg!80x80'
+  avatar: 'http://pic.sc.chinaz.com/files/pic/pic9/201711/bpic4256.jpg'
 }
 
 const mutations = {
@@ -48,7 +48,6 @@ const actions = {
   getInfo({ commit }) {
     return new Promise((resolve, reject) => {
       getInfo().then(response => {
-        console.dir(response)
         if (!response) {
           reject('Verification failed, please Login again.')
         }

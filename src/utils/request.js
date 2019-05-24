@@ -2,7 +2,7 @@ import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
-
+import i18n from '../lang'
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -43,9 +43,7 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    console.dir(response)
     const { data } = response
-    // if the custom code is not 20000, it is judged as an error.
     if (response.status !== 200) {
       Message({
         message: response.error || 'error',
@@ -53,32 +51,34 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })
 
-      // 404: API error; 403: Forbidden; 401: Unauthorized;
-      if (response.status === 404 || response.status === 403 || response.status === 401) {
-        // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-        })
-      }
       return Promise.reject(response.error || 'error')
     } else {
       return data
     }
   },
   error => {
-    console.log('err') // for debug
     console.dir(error)
-    Message({
-      message: error.response.data.error,
-      type: 'error',
-      duration: 5 * 1000
-    })
+    // 404: API error; 403: Forbidden; 401: Unauthorized;
+    if (error.response.status === 404 || error.response.status === 403 || error.response.status === 401) {
+      // to re-login
+      const message = i18n.messages[i18n.locale].login.reloginWarnning
+      const warning = i18n.messages[i18n.locale].login.confirmLogout
+      MessageBox.confirm(message, warning, {
+        confirmButtonText: (i18n.messages[i18n.locale])['login.reLogin'],
+        cancelButtonText: (i18n.messages[i18n.locale])['cancel'],
+        type: 'warning'
+      }).then(() => {
+        store.dispatch('user/resetToken').then(() => {
+          location.reload()
+        })
+      })
+    } else {
+      Message({
+        message: error.response.data.error,
+        type: 'error',
+        duration: 5 * 1000
+      })
+    }
     return Promise.reject(error)
   }
 )

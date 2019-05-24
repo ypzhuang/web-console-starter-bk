@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Vue Element Admin',
+  title: 'Web Console Starter',
 
   /**
    * @type {boolean} true | false

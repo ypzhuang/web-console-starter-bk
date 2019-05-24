@@ -36,13 +36,13 @@
               {{ $t('navbar.dashboard') }}
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">
+          <a target="_blank" href="https://github.com/ypzhuang/web-console-starter/">
             <el-dropdown-item>
               {{ $t('navbar.github') }}
             </el-dropdown-item>
           </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>Docs</el-dropdown-item>
+          <a target="_blank" href="http://127.0.0.1:8080/swagger-ui.html">
+            <el-dropdown-item>API Docs</el-dropdown-item>
           </a>
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>

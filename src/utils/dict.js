@@ -10,6 +10,7 @@ export function getDicts() {
       setDicts(response)
     })
   }
+  if (!dicts) return []
   return JSON.parse(dicts)
 }
 
@@ -17,12 +18,13 @@ export function setDicts(dicts) {
   localStorage.setItem(DICT, JSON.stringify(dicts))
 }
 
-export function removeToken() {
+export function removeDicts() {
   localStorage.removeItem(DICT)
 }
 
 export function getCodes(typeCode) {
   const type = getDicts().find(dict => dict.typeCode === typeCode)
+  if (!type) return []
   return type.codes || []
 }
 

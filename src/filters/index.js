@@ -1,7 +1,6 @@
 // import parseTime, formatTime and set to filter
 import { getName } from '@/utils/dict'
-import { fetchAllPositions } from '@/api/position'
-
+import { uuidMask } from '@/utils/uuid'
 export { parseTime, formatTime } from '@/utils'
 
 /**
@@ -77,25 +76,11 @@ export function code2Name(string) {
 const abnormalStatus = ['停用', '歇业', '暂售', '异常']
 export function statusFilter(status) {
   const name = code2Name(status)
-  const found = abnormalStatus.find(v => name)
+  const found = abnormalStatus.find(v => v === name)
   if (found) return 'danger' // info
   else return 'success'
 }
 
-let positions
-export function positionFilter(keys) {
-  if (!positions) {
-    fetchAllPositions().then(response => {
-      positions = response
-      return keys && keys.map(key => {
-        const position = positions.find(p => p.code === key)
-        return position && position.name || key
-      }).join(';')
-    })
-  } else {
-    return keys && keys.map(key => {
-      const position = positions.find(p => p.code === key)
-      return position && position.name || key
-    }).join(';')
-  }
+export function uuidMaskFilter(uuid) {
+  return uuidMask(uuid)
 }
