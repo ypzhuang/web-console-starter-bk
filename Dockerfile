@@ -1,8 +1,5 @@
 FROM ypzhuang/nodewithgit as builder
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
-
 WORKDIR /root
 COPY . /root
 #RUN npm install --registry=https://registry.npm.taobao.org --verbose
