@@ -161,7 +161,8 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteApp(row.id).then(response => {
-          this.list.shift(row)
+          const index = this.list.indexOf(row)
+          this.list.splice(index, 1)
           this.$message({
             message: this.$t('actionSuccessfully'),
             type: 'success'
