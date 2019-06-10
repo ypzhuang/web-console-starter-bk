@@ -3,7 +3,7 @@ FROM ypzhuang/nodewithgit as builder
 WORKDIR /root
 COPY . /root
 #RUN npm install --registry=https://registry.npm.taobao.org --verbose
-RUN npm install
+RUN npm install --verbose
 RUN npm run build:prod
 
 
