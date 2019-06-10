@@ -1,7 +1,6 @@
 export default {
   route: {
     dashboard: '首页',
-    theme: '换肤',
     profile: '个人中心',
     app: 'APP密钥',
     message: '消息'
